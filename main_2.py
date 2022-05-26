@@ -57,8 +57,9 @@ plt.title('Widmo amplitudowe')
 # decymacja
 nn = data.size
 q = 4  #ilość decymacji (stopień M)
-sig_size = int(nn/q)
-s1 = c[:(len(c)) // q+1]
+sig_size = nn // q
+# c - fft dla jednego kanału
+s1 = c[:len(c) // q + 1]
 s1[1:-1] /= q
 f1 = np.fft.rfftfreq(sig_size, 1/samplerate)
 plt.figure(3)
@@ -69,8 +70,8 @@ plt.title('Widmo sygnału po decymacji')
 
 x1 = np.real(np.fft.irfft(s1))
 fig, ax = plt.subplots(2)
-ax[0].plot(data[:,0][10:10000], label="fs=48 kHz") #zakres próbek dla sygnału przed
-ax[1].plot(x1[10:10000], label="fs=4,8 kHz")    #zakres próbek dla sygnału po
+ax[0].plot(data[:, 0][10:10000], label="fs=48 kHz") #zakres próbek dla sygnału przed
+ax[1].plot(x1[10:10000], label="fs=4,8 kHz")    #zakres próbek dla sygnału po decymacji
 for a in ax:
     a.set_xlabel('Numer próbki')
     a.set_ylabel('Amplituda')
