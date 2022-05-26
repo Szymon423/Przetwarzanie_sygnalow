@@ -106,8 +106,14 @@ class Signal:
         # przypisanie do docelowej tablicy
         self.decimated_signal = np.array(_arr)
 
+        # print logu
+        print("decimation computed")
+
     def periodogram(self, _signal, _samplerate):
         """metoda odpowiedzialana za przedstawienie periodogramu"""
 
         fx, pxx = signal.periodogram(_signal, _samplerate, 'hamming', 2048, scaling='density')
         return fx, pxx
+
+        # print logu
+        print("periodogram computed")
