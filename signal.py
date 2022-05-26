@@ -65,7 +65,6 @@ class Signal:
             print("Signal loaded successfully!")
             print("Signal length:", self.signal_length)
             print("Signal samplerate:", self.samplerate, "Hz")
-            return self.signal
 
     def normalise_signal(self):
         """metoda odpowiedzialana za normalizację sygnału -
