@@ -3,6 +3,7 @@ from scipy.io import wavfile
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.fftpack import fft
+from datetime import datetime
 
 
 class Signal:
@@ -23,14 +24,14 @@ class Signal:
         # zmienna przechowująca długość sygnału
         self.signal_length = 0
 
-        # zmienna przechowująca dane pochodzące z obliczeń fft
-        self.signal_fft = np.zeros(2)
-
         # zmienna odpowiedzialana za wybór kanału do obliczeń - domyślnie lewy
         self.canal = "left"
 
         # zmienna przechowująca wartość największej absolutnej wartości w sygnale - w celach porónawczych
         self.max_abs_val = 0
+
+        # zmienna przechowująca sygnał zdecymowany
+        self.decimated_signal = np.zeros(2)
 
     def define_path(self, path):
         """metoda odpowiedzialana za określenie adresu"""
@@ -64,12 +65,50 @@ class Signal:
             print("Signal loaded successfully!")
             print("Signal length:", self.signal_length)
             print("Signal samplerate:", self.samplerate, "Hz")
+            return self.signal
 
     def normalise_signal(self):
         """metoda odpowiedzialana za normalizację sygnału -
-           zamiana jego zakresu wartości do zakresu [0-1]"""
+           zamiana jego zakresu wartości do zakresu [0-1]
+           realizowane to jest przez podzielenie każego elementu
+           sygnału przez największą wartość w sygnale"""
         self.signal = self.signal / self.max_abs_val
 
-    def calculate_fft(self):
-        """metoda służąca do obliczania ttf z sygnału dla """
-        # self.signal_fft =
+        # print logu
+        print("Signal normalised")
+
+    def calculate_fft(self, _signal, _samplerate):
+        """metoda służąca do obliczania fft z sygnału podanego jako argument """
+
+        # obliczenie wartości surowej fft
+        _raw_fft = fft(_signal)
+
+        # skrócenie zakresu częstotilwości do połowy - usunięcie odbicia
+        signal_fft_y = _raw_fft[0: len(_raw_fft) // 2]
+
+        # dopasowanie częstotliwości do próbek w fft
+        _values = np.array(range(len(_signal) // 2))
+        signal_fft_x = _values / len(_signal) * _samplerate
+
+        # print logu
+        print("FFT computed")
+
+        return signal_fft_x, signal_fft_y
+
+    def decimate_signal(self, grade):
+        """metoda odpowiedzialana za decymację sygnału w dziedzinie czasu
+           wykorzystywana jest co grade-a próbka z sygnału początkowego"""
+
+        _arr = []
+        # zapis co 4 elementu
+        for i in range(self.signal_length // grade):
+            _arr.append(self.signal[grade * i])
+
+        # przypisanie do docelowej tablicy
+        self.decimated_signal = np.array(_arr)
+
+    def periodogram(self, _signal, _samplerate):
+        """metoda odpowiedzialana za przedstawienie periodogramu"""
+
+        fx, pxx = signal.periodogram(_signal, _samplerate, 'hamming', 2048, scaling='density')
+        return fx, pxx

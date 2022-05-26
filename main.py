@@ -1,4 +1,5 @@
 from signal import Signal
+import matplotlib.pyplot as plt
 
 # definicja obiektu sound
 sound = Signal()
@@ -11,4 +12,38 @@ sound.load_singal()
 
 # normalizacja sygnału
 sound.normalise_signal()
-print(sound.signal)
+
+# obliczenie fft dla wczytanego sygnału
+fft_x, fft_y = sound.calculate_fft(sound.signal, sound.samplerate)
+
+# określenie stopnia decymacji
+decimate_grade = 5
+
+# wykonanie decymacji
+sound.decimate_signal(decimate_grade)
+
+# obliczenie fft dla wczytanego sygnału
+fft_x_d, fft_y_d = sound.calculate_fft(sound.decimated_signal, sound.samplerate // decimate_grade)
+
+# wyświetlanie fft dla wczytanego sygnału oraz dla sygnału po decymacji
+plt.figure(1)
+plt.semilogy(fft_x, abs(fft_y), 'r')
+plt.semilogy(fft_x_d, abs(fft_y_d), 'b')
+plt.xlim([0, 5000])
+plt.xlabel('f [Hz]')
+plt.ylabel('Amplituda [dB]')
+plt.title('Widmo amplitudowe')
+plt.legend(["oryginal", "decimated"])
+
+# obliczenie periodogramu dla sygnału początkowego oraz zdecymowanego
+fx, pxx = sound.periodogram(sound.signal, sound.samplerate)
+fx_d, pxx_d = sound.periodogram(sound.decimated_signal, sound.samplerate // decimate_grade)
+plt.figure(2)
+plt.semilogy(fx, pxx)
+plt.semilogy(fx_d, pxx_d)
+plt.xlabel('f [Hz]')
+plt.xlim([0, 5000])
+plt.ylabel('Widmowa gęstość mocy')
+plt.title('Periodogram przetwarzanego sygnału')
+plt.legend(["oryginal", "decimated"])
+plt.show()
