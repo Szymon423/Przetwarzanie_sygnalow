@@ -1,7 +1,7 @@
 # Przetwarzanie sygnalow
 Projekt w którym realizowane jest przetwarzanie sygnałów oparte o przekształcenie ortogonalne.
 
-Dodałem podejście obiektowe, całość jest realizowana z pomocą jednej klasy - Signal.
+Dodałem podejście obiektowe, całość jest realizowana z pomocą jednej klasy - Signal. Plik main.py jest plikiem głównym. Plik main2.py to stary plik od Filipa.
 # Na ten moment zrobione jest:
  - obliczanie FFT
  - obliczanie periodogramu
