@@ -119,7 +119,7 @@ class Signal:
         print("periodogram computed")
 
     def save_as_CSV(self, data, file_name):
-        """metoda odpowiedzialana za zapis zmiennej do pliku JSON"""
+        """metoda odpowiedzialana za zapis zmiennej do pliku CSV"""
         if np.dtype(data[0]) == np.complex128:
             print("here")
             x1 = np.real(data)
