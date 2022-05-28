@@ -6,9 +6,10 @@ Dodałem podejście obiektowe, całość jest realizowana z pomocą jednej klasy
  - obliczanie FFT
  - obliczanie periodogramu
  - realizacja decymacji
+ - przebieg czasowy przed i po decymacji
+ - zabawa z kompresją - zapis sygnału w postaci np. współczynników z FFT i porównanie z oryginalnym rozmiarem pliku
 
 # Jeszcze do zrobienia jest:
  - wykonanie filtrowania sygnału - odszumianie lub jakiś inny filtr (pasmowo przepustowy?)
- - zabawa z kompresją - zapis sygnału w postaci np. współczynników z FFT i porównanie z oryginalnym rozmiarem pliku
- - przebieg czasowy przed i po fft oraz przed i po zastosowaniu filtra
+ - przebieg czasowy przed i po zastosowaniu filtra
  
