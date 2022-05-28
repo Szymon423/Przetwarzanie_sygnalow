@@ -10,4 +10,5 @@ Dodałem podejście obiektowe, całość jest realizowana z pomocą jednej klasy
 # Jeszcze do zrobienia jest:
  - wykonanie filtrowania sygnału - odszumianie lub jakiś inny filtr (pasmowo przepustowy?)
  - zabawa z kompresją - zapis sygnału w postaci np. współczynników z FFT i porównanie z oryginalnym rozmiarem pliku
- - dopiszcie swoje pomysły
+ - przebieg czasowy przed i po fft oraz przed i po zastosowaniu filtra
+ 
