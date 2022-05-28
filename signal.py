@@ -92,7 +92,7 @@ class Signal:
         # print logu
         print("FFT computed")
 
-        return signal_fft_x, signal_fft_y
+        return signal_fft_x, signal_fft_y, _raw_fft
 
     def decimate_signal(self, grade):
         """metoda odpowiedzialana za decymację sygnału w dziedzinie czasu
@@ -117,3 +117,15 @@ class Signal:
 
         # print logu
         print("periodogram computed")
+
+    def save_as_CSV(self, data, file_name):
+        """metoda odpowiedzialana za zapis zmiennej do pliku JSON"""
+        if np.dtype(data[0]) == np.complex128:
+            print("here")
+            x1 = np.real(data)
+            x2 = np.imag(data)
+            X = np.column_stack((x1, x2))
+            # data.view(data.dtype)
+            np.savetxt("Compressed\\" + file_name + ".csv", X, delimiter=',', newline='\n', header='', footer='')
+        else:
+            np.savetxt("Compressed\\" + file_name + ".csv", data.view(data.dtype), delimiter='', newline='\n', header='', footer='')
