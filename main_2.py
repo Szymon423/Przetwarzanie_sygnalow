@@ -9,7 +9,7 @@ import scipy.fft
 
 #filename = input('Podaj ścieżkę do pliku .wav: ')
 filename = "sin_1kHz"
-
+print("time")
 # try:
 # 	f = open(filename,'r')
 # 	f.close()
