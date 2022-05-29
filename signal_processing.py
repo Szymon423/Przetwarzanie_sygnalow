@@ -1,7 +1,6 @@
 from scipy import signal
 from scipy.io import wavfile
 import numpy as np
-import matplotlib.pyplot as plt
 from scipy.fftpack import fft
 from datetime import datetime
 import scipy.fft

@@ -84,4 +84,13 @@ plt.xlabel('Czas [s]')
 plt.ylabel('Amplituda')
 plt.title('Porównanie fft przed i po filtracji')
 plt.legend(["oryginal", "filtered"])
+
+# przebieg czasowy przed i po filtracji
+plt.figure(5)
+plt.plot(sound.signal)
+plt.plot(filtered_sound)
+plt.xlabel('Czas [s]')
+plt.ylabel('Amplituda')
+plt.title('Przebiegi czasowe przed i po filtracji')
+plt.legend(["oryginal", "filtrated"])
 plt.show()
