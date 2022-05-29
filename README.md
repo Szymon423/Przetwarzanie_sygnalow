@@ -4,12 +4,14 @@ Projekt w którym realizowane jest przetwarzanie sygnałów oparte o przekształ
 Dodałem podejście obiektowe, całość jest realizowana z pomocą jednej klasy - Signal. Plik main.py jest plikiem głównym. Plik main_2.py to stary plik od Filipa.
 # Na ten moment zrobione jest:
  - obliczanie FFT
+ - obliczanie IFFT
  - obliczanie periodogramu
  - realizacja decymacji
  - przebieg czasowy przed i po decymacji
- - zabawa z kompresją - zapis sygnału w postaci np. współczynników z FFT i porównanie z oryginalnym rozmiarem pliku
+ - zabawa z kompresją - zapis sygnału w postaci współczynników FFT
+ - filtr pasmowoblokujący - z regulacją pasma blokowania
 
 # Jeszcze do zrobienia jest:
- - wykonanie filtrowania sygnału - odszumianie lub jakiś inny filtr (pasmowo przepustowy?)
  - przebieg czasowy przed i po zastosowaniu filtra
+ - jakieś inne pomysły?
  
