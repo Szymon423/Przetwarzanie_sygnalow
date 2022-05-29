@@ -145,7 +145,7 @@ class SignalProcessing:
         max_freq_in_fft = samplerate / 2
 
         # znalezienie indeksów dla początkowej i końcowej częstotliwości odcięcie
-        staart_freq_index = int(cut_freq_start * len_ / max_freq_in_fft)
+        start_freq_index = int(cut_freq_start * len_ / max_freq_in_fft)
         stop_freq_index = int(cut_freq_stop * len_ / max_freq_in_fft)
 
         # FILTRACJA
@@ -154,12 +154,10 @@ class SignalProcessing:
         filtered_fft = data.copy()
 
         # wyzerowanie współczynników w fft odpowiadającym częstotliwościom poniżej częstotliwości Nyquista
-        filtered_fft[staart_freq_index:stop_freq_index] = 0
+        filtered_fft[start_freq_index:stop_freq_index] = 0
 
         # wyzerowanie współczynników w fft odpowiadającym częstotliwościom powyżej częstotliwości Nyquista
-        help_1 = int(staart_freq_index + max_freq_in_fft)
-        help_2 = int(stop_freq_index + max_freq_in_fft)
-        filtered_fft[help_1:help_2] = 0
+        filtered_fft[-stop_freq_index:-start_freq_index] = 0
 
         # print logu
         print("filtration computed")

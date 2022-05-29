@@ -68,19 +68,20 @@ plt.legend(["oryginal", "decimated"])
 # sound.save_as_CSV(raw_fft[:len(raw_fft)//2], "freq_domain")
 
 # filtracja sygnału oryginalnego
-filtered_fft = sound.filter_signal(raw_fft, sound.samplerate, 5000, 15000)
+filtered_fft = sound.filter_signal(raw_fft, sound.samplerate, 0, 5000)
 
 # obliczenie transformatyodwrotnej
 filtered_sound = sound.calculate_invers_fft(filtered_fft)
 
+# obliczenie fft na podstawie nowego sygnału - po filtracji
 x_new, y_new, _ = sound.calculate_fft(filtered_sound, sound.samplerate)
 
-plt.figure(6)
+plt.figure(4)
 plt.semilogy(fft_x, abs(fft_y), 'b')
 plt.semilogy(x_new, abs(y_new), 'r')
 plt.ylim([10**(-2), 10**5])
 plt.xlabel('Czas [s]')
 plt.ylabel('Amplituda')
-plt.title('Przebieg czasowy po zastosowaniu IFFT')
+plt.title('Porównanie fft przed i po filtracji')
 plt.legend(["oryginal", "filtered"])
 plt.show()
