@@ -1,9 +1,9 @@
-from signal import Signal
+from signal_processing import SignalProcessing
 import matplotlib.pyplot as plt
 import numpy as np
 
 # definicja obiektu sound
-sound = Signal()
+sound = SignalProcessing()
 
 # określenie ścieżki dostępu
 sound.define_path("Samples\\example2.wav")
@@ -23,9 +23,9 @@ decimate_grade = 5
 # wykonanie decymacji
 sound.decimate_signal(decimate_grade)
 
-x = np.linspace(0,sound.signal_length, sound.signal_length)
-x1 = np.linspace(0,sound.signal_length//decimate_grade, sound.signal_length//decimate_grade)
-x1 = x1*decimate_grade
+x = np.linspace(0, sound.signal_length, sound.signal_length)
+x1 = np.linspace(0, sound.signal_length // decimate_grade, sound.signal_length // decimate_grade)
+x1 = x1 * decimate_grade
 
 # przebieg czasowy
 plt.figure(1)
@@ -60,10 +60,27 @@ plt.xlim([0, 5000])
 plt.ylabel('Widmowa gęstość mocy')
 plt.title('Periodogram przetwarzanego sygnału')
 plt.legend(["oryginal", "decimated"])
+
+# zapis do CSV danych z sygnału nie przetworzonego
+# sound.save_as_CSV(sound.signal, "time_domain")
+
+# zapis do CSV danych z sygnału nie przetworzonego
+# sound.save_as_CSV(raw_fft[:len(raw_fft)//2], "freq_domain")
+
+# filtracja sygnału oryginalnego
+filtered_fft = sound.filter_signal(raw_fft, sound.samplerate, 5000, 15000)
+
+# obliczenie transformatyodwrotnej
+filtered_sound = sound.calculate_invers_fft(filtered_fft)
+
+x_new, y_new, _ = sound.calculate_fft(filtered_sound, sound.samplerate)
+
+plt.figure(6)
+plt.semilogy(fft_x, abs(fft_y), 'b')
+plt.semilogy(x_new, abs(y_new), 'r')
+plt.ylim([10**(-2), 10**5])
+plt.xlabel('Czas [s]')
+plt.ylabel('Amplituda')
+plt.title('Przebieg czasowy po zastosowaniu IFFT')
+plt.legend(["oryginal", "filtered"])
 plt.show()
-
-# zapis do CSV danych z sygnału nie przetworzonego
-sound.save_as_CSV(sound.signal, "time_domain")
-
-# zapis do CSV danych z sygnału nie przetworzonego
-sound.save_as_CSV(raw_fft[:len(raw_fft)//2], "freq_domain")

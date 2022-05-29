@@ -4,9 +4,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.fftpack import fft
 from datetime import datetime
+import scipy.fft
 
 
-class Signal:
+class SignalProcessing:
     """klasa odpowiedzialana za przetwarzanie sygnału"""
 
     def __init__(self):
@@ -121,7 +122,6 @@ class Signal:
     def save_as_CSV(self, data, file_name):
         """metoda odpowiedzialana za zapis zmiennej do pliku CSV"""
         if np.dtype(data[0]) == np.complex128:
-            print("here")
             x1 = np.real(data)
             x2 = np.imag(data)
             X = np.column_stack((x1, x2))
@@ -129,3 +129,50 @@ class Signal:
             np.savetxt("Compressed\\" + file_name + ".csv", X, delimiter=',', newline='\n', header='', footer='')
         else:
             np.savetxt("Compressed\\" + file_name + ".csv", data.view(data.dtype), delimiter='', newline='\n', header='', footer='')
+
+        # print logu
+        print("done saving", file_name + ".csv")
+
+    def filter_signal(self, data, samplerate, cut_freq_start, cut_freq_stop):
+        """metoda odpowiedzialana za filtrację sygnału - filtr usuwający częstotliwości
+           z zakresu od cut_freq_start do cut_freq_stop, operacja realizowana jest
+           na surowym sygnale fft"""
+
+        # określenie połowy długości wektora z danymi
+        len_ = len(data) / 2
+
+        # określenie maksymalnej częstotliwości w
+        max_freq_in_fft = samplerate / 2
+
+        # znalezienie indeksów dla początkowej i końcowej częstotliwości odcięcie
+        staart_freq_index = int(cut_freq_start * len_ / max_freq_in_fft)
+        stop_freq_index = int(cut_freq_stop * len_ / max_freq_in_fft)
+
+        # FILTRACJA
+
+        # utowrzenie kopii dla realizacji przekształceń
+        filtered_fft = data.copy()
+
+        # wyzerowanie współczynników w fft odpowiadającym częstotliwościom poniżej częstotliwości Nyquista
+        filtered_fft[staart_freq_index:stop_freq_index] = 0
+
+        # wyzerowanie współczynników w fft odpowiadającym częstotliwościom powyżej częstotliwości Nyquista
+        help_1 = int(staart_freq_index + max_freq_in_fft)
+        help_2 = int(stop_freq_index + max_freq_in_fft)
+        filtered_fft[help_1:help_2] = 0
+
+        # print logu
+        print("filtration computed")
+
+        return filtered_fft
+
+    def calculate_invers_fft(self, data):
+        """metoda odpowiedzialana za obliczenie sygnały w domenie czasowej na podstawie domeny częstotliwościowej"""
+
+        # odwrotna transformata Fouriera - IFFT
+        _raw_ifft = scipy.fft.ifft(data)
+
+        # print logu
+        print("IFFT computed")
+
+        return _raw_ifft
