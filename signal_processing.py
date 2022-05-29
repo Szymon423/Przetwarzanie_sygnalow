@@ -50,6 +50,7 @@ class SignalProcessing:
             if self.canal == "left":
                 # dane są zapisane w postaci macierzy nx2 (zero to lewy kanał, 2 to prawy)
                 self.signal = self.signal[:, 0]
+
             else:
                 self.signal = self.signal[:, 1]
 

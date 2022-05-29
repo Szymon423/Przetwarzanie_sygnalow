@@ -6,7 +6,7 @@ import numpy as np
 sound = SignalProcessing()
 
 # określenie ścieżki dostępu
-sound.define_path("Samples\\example2.wav")
+sound.define_path("Samples\\msms2.wav")
 
 # wczytanie sygnału do obiektu
 sound.load_singal()
@@ -78,6 +78,10 @@ filtered_sound = sound.calculate_invers_fft(filtered_fft)
 
 # obliczenie fft na podstawie nowego sygnału - po filtracji
 x_new, y_new, _ = sound.calculate_fft(filtered_sound, sound.samplerate)
+
+# filtr butter
+
+
 
 plt.figure(4)
 plt.semilogy(fft_x, abs(fft_y), 'b')
