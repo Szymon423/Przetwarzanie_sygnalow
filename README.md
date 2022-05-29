@@ -10,6 +10,7 @@ Dodałem podejście obiektowe, całość jest realizowana z pomocą jednej klasy
  - przebieg czasowy przed i po decymacji
  - zabawa z kompresją - zapis sygnału w postaci współczynników FFT
  - filtr pasmowoblokujący - z regulacją pasma blokowania
+ - plotowanie przebiegów czasowych przed i po filtracji
 
 # Jeszcze do zrobienia jest:
  - jakieś pomysły?
