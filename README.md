@@ -12,6 +12,5 @@ Dodałem podejście obiektowe, całość jest realizowana z pomocą jednej klasy
  - filtr pasmowoblokujący - z regulacją pasma blokowania
 
 # Jeszcze do zrobienia jest:
- - przebieg czasowy przed i po zastosowaniu filtra
- - jakieś inne pomysły?
+ - jakieś pomysły?
  
