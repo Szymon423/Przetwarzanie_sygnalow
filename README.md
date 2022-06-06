@@ -13,5 +13,9 @@ Dodałem podejście obiektowe, całość jest realizowana z pomocą jednej klasy
  - plotowanie przebiegów czasowych przed i po filtracji
 
 # Jeszcze do zrobienia jest:
- - jakieś pomysły?
+ - filtr dolnoprzepustowy
+ - numeryczne podejście do transformacji Fouriera
+ - zaimplementowanie kompresji stratnej
+ - przesłuchanie dźwięków po kilku operacjach (wnioski?)
+ - dokumentacja i prezka łączona na koniec (20.06)
  
