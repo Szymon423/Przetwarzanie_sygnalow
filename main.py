@@ -104,7 +104,7 @@ plt.legend(["oryginal", "filtrated"])
 
 fft_compr = []
 fft_with_zeros = raw_fft.copy()
-treshold = 10 ** 1.8
+treshold = 10 ** 1.2
 
 for index, sample in enumerate(abs(raw_fft)):
     if sample < treshold:
@@ -146,4 +146,4 @@ print("sound len:", sound.signal_length)
 
 
 
-sound.save_as_CSV(fft_compr, "1.8")
+sound.save_as_CSV(fft_compr, "1.2")
