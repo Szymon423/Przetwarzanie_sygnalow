@@ -6,7 +6,7 @@ import numpy as np
 sound = SignalProcessing()
 
 # określenie ścieżki dostępu
-sound.define_path("Samples\\msms2.wav")
+sound.define_path("Samples\\example.wav")
 
 # wczytanie sygnału do obiektu
 sound.load_singal()
@@ -79,8 +79,6 @@ filtered_sound = sound.calculate_invers_fft(filtered_fft)
 # obliczenie fft na podstawie nowego sygnału - po filtracji
 x_new, y_new, _ = sound.calculate_fft(filtered_sound, sound.samplerate)
 
-# filtr butter
-
 
 
 plt.figure(4)
@@ -96,10 +94,56 @@ plt.legend(["oryginal", "filtrated"])
 plt.figure(5)
 plt.plot(sound.signal)
 plt.plot(filtered_sound)
-plt.xlim([0,1000])
+plt.xlim([0, 1000])
 plt.ylim([-0.03, 0.03])
 plt.xlabel('Numer próbki')
 plt.ylabel('Amplituda')
 plt.title('Przebiegi czasowe przed i po filtracji')
 plt.legend(["oryginal", "filtrated"])
+
+
+fft_compr = []
+fft_with_zeros = raw_fft.copy()
+treshold = 10 ** 1.8
+
+for index, sample in enumerate(abs(raw_fft)):
+    if sample < treshold:
+        fft_with_zeros[index] = 0
+    else:
+        fft_compr.append(raw_fft[index])
+
+fft_compr = np.array(fft_compr)
+
+dupa = sound.calculate_invers_fft(fft_with_zeros)
+print(np.amax(abs(dupa)))
+print(np.amax(abs(sound.signal)))
+
+# przebieg czasowy przed i po filtracji
+plt.figure(6)
+plt.plot(sound.signal)
+plt.plot(dupa)
+plt.xlim([10000, 11000])
+# plt.ylim([-0.03, 0.03])
+plt.xlabel('Numer próbki')
+plt.ylabel('Amplituda')
+plt.title('Przebiegi czasowe przed i po kompresji')
+plt.legend(["oryginal", "compressed"])
+
+compres_x, compres_y, _ = sound.calculate_fft(dupa, sound.samplerate)
+
+plt.figure(7)
+plt.semilogy(fft_x, abs(fft_y), 'b')
+plt.semilogy(compres_x, abs(compres_y), 'r')
+plt.ylim([10**(-2), 10**5])
+plt.xlabel('f [Hz]')
+plt.ylabel('Amplituda')
+plt.title('Porównanie fft przed i po kompresji')
+plt.legend(["oryginal", "compressed"])
 plt.show()
+
+print("dupa len:", len(dupa))
+print("sound len:", sound.signal_length)
+
+
+
+sound.save_as_CSV(fft_compr, "1.8")

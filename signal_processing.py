@@ -174,3 +174,5 @@ class SignalProcessing:
         print("IFFT computed")
 
         return _raw_ifft
+
+
