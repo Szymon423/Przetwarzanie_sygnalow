@@ -48,7 +48,7 @@ a1 = np.zeros(len(x)+a)
 for i in range(0,len(x)):
     a1[i] = xx[i]
 
-## Przebieg czasowy sygnału oryginalnego i uzupełnionego
+### Przebieg czasowy sygnału oryginalnego i uzupełnionego
 # plt.figure(1)
 # plt.plot(a1)
 # plt.plot(xx)
