@@ -7,7 +7,6 @@ from scipy import signal
 import scipy.fft
 import math
 
-
 #filename = input('Podaj ścieżkę do pliku .wav: ')
 filename = "example"
 print("time")
@@ -20,39 +19,32 @@ print("time")
 
 samplerate, data = wavfile.read("Samples\\" + filename + ".wav")
 
-print(data[:,0])
-print(len(data[:,0]))
-print(data[:,1])
+# print(data[:,0])
+# print(data[:,1])
 print('Częstotliwość próbkowania [Hz]: ', samplerate)
-
 
 # czas trwania sygnału
 time = data.shape[0] / samplerate 
 x = np.linspace(0,time,data.shape[0])
+xx = data[:,0]
 
-#print(data.shape)
 print('Wymiar przetwarzanego sygnału (ilość próbek): ', data.shape[0])
 print('Czas trwania sygnału [s]: ', time)
 
-# przebieg czasowy
+a = (2**math.ceil(np.log2(len(x)))-len(x))      #ceil lub floor - obliczenie ilości próbek potrzebnych do osiągnięcia liczby próbek, która jest potęgą 2
+syg_2 = np.zeros(len(x)+a)         # wypełnianie brakujących próbek zerami
+print("Ilość próbek zerowych dodana do sygnału: ", a)
+print("Długość sygnału uzupełnionego zerami: ", len(syg_2))
+for i in range(0,len(x)):       # dla ceil len(x), dla floor len(syg_2)
+    syg_2[i] = xx[i]
+
+### Przebieg czasowy sygnału oryginalnego i uzupełnionego zerami
 # plt.figure(1)
-# plt.plot(x,data[:,0])
+# plt.plot(syg_2)
+# plt.plot(xx)
 # plt.xlabel('Czas [s]')
 # plt.ylabel('Amplituda')
 # plt.title('Przebieg czasowy')
-xx = data[:,0]
-
-a = (2**math.ceil(np.log2(len(x)))-len(x))
-print("Ilość próbek zerowych: ", a)
-a1 = np.zeros(len(x)+a)
-for i in range(0,len(x)):
-    a1[i] = xx[i]
-
-### Przebieg czasowy sygnału oryginalnego i uzupełnionego
-# plt.figure(1)
-# plt.plot(a1)
-# plt.plot(xx)
-
 
 '''Liczenie DFT z definicji - brak pamięci'''
 # def DFT(x):
@@ -73,14 +65,14 @@ for i in range(0,len(x)):
 # plt.figure(1)
 # plt.stem(freq, abs(X), 'b', \
 #          markerfmt=" ", basefmt="-b")
-# plt.xlabel('Freq (Hz)')
-# plt.ylabel('DFT Amplitude |X(freq)|')
+# plt.xlabel('f [Hz]')
+# plt.ylabel('Amplituda')
+# plt.legend(["DFT definition"])
 # plt.show()
 
 def FFT(x):
     """ A recursive implementation of the 1D Cooley-Tukey FFT, the input should have a length of power of 2."""
     N = len(x)
-
     if N == 1:
         return x
     else:
@@ -94,42 +86,41 @@ def FFT(x):
              X_even + factor[int(N / 2):] * X_odd])
         return X
 
-X=FFT(a1)
+X=FFT(syg_2)
 # obliczenie częstotliwości
 N = len(X)
 n = np.arange(N)
 T = N/samplerate
 freq = n/T
-n_oneside = N//2                # Dzielenie widma na pół
-f_oneside = freq[:n_oneside]    # Otrzymanie częstotliwości dla połowy widma
-X_oneside =X[:n_oneside]/n_oneside  # Normalizacja amplitudy
-plt.figure(2)
-plt.semilogy(f_oneside, abs(X_oneside), 'b')
-plt.ylim(10**-3,10**5)
-plt.xlabel('f [Hz]')
-plt.ylabel('Amplituda')
-plt.title('Widmo amplitudowe sygnału po transformacie numerycznej')
-plt.legend(["FFT definition"])
+n_half = N//2               # Bierzemy pod uwagę połowę widma
+f_half = freq[:n_half]      # Częstotliwość dla połowy widma
+X_half =X[:n_half]/n_half   # Normalizacja amplitudy
+
+fig, (ax1,ax2) = plt.subplots(1,2, figsize = (16,8))
+ax1.semilogy(f_half, abs(X_half), 'b')
+#plt.ylim(10**-4,10**5)
+ax1.set_xlabel('f [Hz]')
+ax1.set_ylabel('Amplituda')
+ax1.set_title('Widmo amplitudowe sygnału po transformacie obliczonej z definicji')
+ax1.legend(["FFT definition"])
 
 # widmo amplitudowe - przy użyciu transformaty FFT
 b = np.array([(ele/2**13.)*2-1 for ele in data])
-c= fft(b[:,0])
+c = fft(b[:,0])
 d = len(c/2)
 ff = np.array(range(data.shape[0]//2))
 e = ff/data.shape[0]*samplerate
 # plt.plot(e[10:],20*np.log10(abs(c[:(d)]))[10:data.shape[0]//2],'r') #skala w decybelach
-# plt.ylim(60,120)
-plt.figure(5)
-plt.semilogy(e[10:],abs(c[:(d)])[10:data.shape[0]//2],'r') #skala logarytmiczna
+ax2.semilogy(e[10:],abs(c[:(d)])[10:data.shape[0]//2],'r') #skala logarytmiczna
 #plt.ylim(10**2,10**5)
-plt.xlabel('f [Hz]')
-plt.ylabel('Amplituda')
-plt.title('Widmo amplitudowe sygnału po FFT')
-plt.legend(["FFT"])
+ax2.set_xlabel('f [Hz]')
+ax2.set_ylabel('Amplituda')
+ax2.set_title('Widmo amplitudowe sygnału po FFT')
+ax2.legend(["FFT"])
 
 # Sprawdzenie wyników transformat
 print('Własna funkcja FFT: ')
-print(FFT(a1))
+print(FFT(syg_2))
 print('numpy.fft.fft: ')
 print(fft(xx))
 
