@@ -158,10 +158,10 @@ class SignalProcessing:
         filtered_fft = data.copy()
 
         # wyzerowanie współczynników w fft odpowiadającym częstotliwościom poniżej częstotliwości Nyquista
-        filtered_fft[start_freq_index:stop_freq_index] /= 1000
+        filtered_fft[start_freq_index:stop_freq_index] = 0
 
         # wyzerowanie współczynników w fft odpowiadającym częstotliwościom powyżej częstotliwości Nyquista
-        filtered_fft[-stop_freq_index:-start_freq_index] /= 1000
+        filtered_fft[-stop_freq_index:-start_freq_index] = 0
 
         # print logu
         print("filtration computed")

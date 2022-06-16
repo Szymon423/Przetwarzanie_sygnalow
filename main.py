@@ -7,7 +7,7 @@ from scipy.io.wavfile import write
 sound = SignalProcessing()
 
 # określenie ścieżki dostępu
-sound.define_path("Samples\\panTadeusz_noise.wav")
+sound.define_path("Samples\\panTadeusz_ijo_ijo.wav")
 
 # wczytanie sygnału do obiektu
 sound.load_singal()
@@ -72,11 +72,11 @@ sound.save_as_CSV(sound.signal, "time_domain")
 sound.save_as_CSV(raw_fft[:len(raw_fft)//2], "freq_domain")
 
 # filtracja sygnału oryginalnego
-filtered_fft = sound.filter_signal(raw_fft, sound.samplerate, 0, 2000)
+filtered_fft = sound.filter_signal(raw_fft, sound.samplerate, 0, 80)
+filtered_fft = sound.filter_signal(filtered_fft, sound.samplerate, 300, 25000)
 
 # obliczenie transformatyodwrotnej
 filtered_sound = sound.calculate_invers_fft(filtered_fft)
-filtered_sound = filtered_sound * sound.max_abs_val
 
 # obliczenie fft na podstawie nowego sygnału - po filtracji
 x_new, y_new, _ = sound.calculate_fft(filtered_sound, sound.samplerate)
@@ -136,7 +136,7 @@ compres_x, compres_y, _ = sound.calculate_fft(dupa, sound.samplerate)
 plt.figure(7)
 plt.semilogy(fft_x, abs(fft_y), 'b')
 plt.semilogy(compres_x, abs(compres_y), 'r')
-plt.ylim([10**(-2), 10**5])
+# plt.ylim([10**(-2), 10**5])
 plt.xlabel('f [Hz]')
 plt.ylabel('Amplituda')
 plt.title('Porównanie fft przed i po kompresji')
@@ -147,4 +147,6 @@ print("dupa len:", len(dupa))
 print("sound len:", sound.signal_length)
 
 sound.save_as_CSV(fft_compr, "1.8")
+
+filtered_sound = filtered_sound * sound.max_abs_val
 write("save.wav", sound.samplerate, filtered_sound.astype(np.int16))
