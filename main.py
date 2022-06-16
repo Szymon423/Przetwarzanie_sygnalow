@@ -1,12 +1,13 @@
 from signal_processing import SignalProcessing
 import matplotlib.pyplot as plt
 import numpy as np
+from scipy.io.wavfile import write
 
 # definicja obiektu sound
 sound = SignalProcessing()
 
 # określenie ścieżki dostępu
-sound.define_path("Samples\\example.wav")
+sound.define_path("Samples\\panTadeusz_noise.wav")
 
 # wczytanie sygnału do obiektu
 sound.load_singal()
@@ -71,10 +72,11 @@ sound.save_as_CSV(sound.signal, "time_domain")
 sound.save_as_CSV(raw_fft[:len(raw_fft)//2], "freq_domain")
 
 # filtracja sygnału oryginalnego
-filtered_fft = sound.filter_signal(raw_fft, sound.samplerate, 2000, 5000)
+filtered_fft = sound.filter_signal(raw_fft, sound.samplerate, 0, 2000)
 
 # obliczenie transformatyodwrotnej
 filtered_sound = sound.calculate_invers_fft(filtered_fft)
+filtered_sound = filtered_sound * sound.max_abs_val
 
 # obliczenie fft na podstawie nowego sygnału - po filtracji
 x_new, y_new, _ = sound.calculate_fft(filtered_sound, sound.samplerate)
@@ -144,6 +146,5 @@ plt.show()
 print("dupa len:", len(dupa))
 print("sound len:", sound.signal_length)
 
-
-
 sound.save_as_CSV(fft_compr, "1.8")
+write("save.wav", sound.samplerate, filtered_sound.astype(np.int16))
