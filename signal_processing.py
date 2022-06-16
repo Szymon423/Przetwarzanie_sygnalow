@@ -47,12 +47,16 @@ class SignalProcessing:
             self.samplerate, self.signal = wavfile.read(self.file_adress)
 
             # wybór kanału do dalszych obliczeń
-            if self.canal == "left":
-                # dane są zapisane w postaci macierzy nx2 (zero to lewy kanał, 2 to prawy)
-                self.signal = self.signal[:, 0]
 
-            else:
-                self.signal = self.signal[:, 1]
+            is2canals = (self.signal.ndim == 2)
+
+            if is2canals:
+                if self.canal == "left":
+                    # dane są zapisane w postaci macierzy nx2 (zero to lewy kanał, 2 to prawy)
+                    self.signal = self.signal[:, 0]
+
+                else:
+                    self.signal = self.signal[:, 1]
 
             # określenie długości sygnału
             self.signal_length = len(self.signal)
