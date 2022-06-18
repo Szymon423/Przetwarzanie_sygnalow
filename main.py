@@ -6,6 +6,8 @@ import scipy
 from scipy import signal
 from scipy.signal import butter
 from scipy.signal import filtfilt
+from scipy.io import wavfile
+import noisereduce as nr
 
 
 # definicja obiektu sound
@@ -172,15 +174,64 @@ b, a = butter(3, 0.05)
 
 y = scipy.signal.filtfilt(b, a, sound.signal)
 y = y * sound.max_abs_val
-write("save.wav", sound.samplerate, y.astype(np.int16))
+
+# noise_reduced =
+noise_reduced = nr.reduce_noise(sound.signal, sr=sound.samplerate)
+noise_reduced = noise_reduced * sound.max_abs_val
+
+write("Samples\\filtry\\save_butter_karetka.wav", sound.samplerate, y.astype(np.int16))
+write("Samples\\filtry\\save_noise_reduced_karetka.wav", sound.samplerate, noise_reduced.astype(np.int16))
 
 plt.figure(8)
 plt.plot(sound.signal * sound.max_abs_val)
 plt.plot(y)
-plt.xlim([10000, 15000])
-# plt.ylim([-0.03, 0.03])
+plt.plot(noise_reduced)
 plt.xlabel('Numer próbki')
 plt.ylabel('Amplituda')
-plt.title('Przebiegi czasowe przed i po kompresji')
-plt.legend(["oryginal", "compressed"])
+plt.title('Przebiegi czasowe przed i po filtracji')
+plt.legend(["oryginał", "filtr Butterwortha", "noisereduce"])
+
+plt.figure(9)
+plt.plot(sound.signal * sound.max_abs_val)
+plt.plot(y)
+# plt.plot(noise_reduced)
+plt.xlim([51500, 55000])
+# plt.ylim([-50, 50])
+plt.xlabel('Numer próbki')
+plt.ylabel('Amplituda')
+plt.title('Przebiegi czasowe przed i po filtracji')
+plt.legend(["oryginał", "filtr Butterwortha"])
+
+plt.figure(10)
+plt.plot(sound.signal * sound.max_abs_val)
+# plt.plot(y)
+plt.plot(noise_reduced)
+plt.xlim([51500, 55000])
+# plt.ylim([-50, 50])
+plt.xlabel('Numer próbki')
+plt.ylabel('Amplituda')
+plt.title('Przebiegi czasowe przed i po filtracji')
+plt.legend(["oryginał", "noisereduce"])
+
+plt.figure(11)
+fft_x, fft_y, raw_fft = sound.calculate_fft(sound.signal * sound.max_abs_val, sound.samplerate)
+y_x, y_y, _ = sound.calculate_fft(y, sound.samplerate)
+plt.plot(fft_x, abs(fft_y), 'b')
+plt.plot(y_x, abs(y_y), 'r')
+plt.xlabel('f [Hz]')
+plt.ylabel('Amplituda')
+plt.title('Porównanie fft przed i po kompresji')
+plt.legend(["oryginal", "filtr Butterwortha"])
+
+plt.figure(12)
+noise_reduced_x, noise_reduced_y, _ = sound.calculate_fft(noise_reduced, sound.samplerate)
+plt.plot(fft_x, abs(fft_y), 'b')
+plt.plot(noise_reduced_x, abs(noise_reduced_y), 'r')
+plt.xlabel('f [Hz]')
+plt.ylabel('Amplituda')
+plt.title('Porównanie fft przed i po kompresji')
+plt.legend(["oryginal", "noisereduce"])
+
 plt.show()
+
+
