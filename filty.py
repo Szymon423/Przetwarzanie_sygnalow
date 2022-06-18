@@ -9,7 +9,7 @@ from scipy.io.wavfile import write
 sound = SignalProcessing()
 
 # określenie ścieżki dostępu
-sound.define_path("Samples\\msms2.wav")
+sound.define_path("Samples\\panTadeusz_noise.wav")
 
 # wczytanie sygnału do obiektu
 sound.load_singal()

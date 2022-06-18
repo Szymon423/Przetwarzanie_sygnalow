@@ -156,7 +156,7 @@ sound.save_as_CSV(fft_compr, "1.8")
 
 filtered_sound = filtered_sound * sound.max_abs_val
 
-fs = 44100/2
+fs = sound.samplerate / 2
 lowcut = 20
 highcut = 50
 
