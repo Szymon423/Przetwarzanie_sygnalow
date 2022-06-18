@@ -2,12 +2,18 @@ from signal_processing import SignalProcessing
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.io.wavfile import write
+import scipy
+from scipy import signal
+from scipy.signal import butter
+from scipy.signal import filtfilt
+
 
 # definicja obiektu sound
 sound = SignalProcessing()
 
 # określenie ścieżki dostępu
 sound.define_path("Samples\\panTadeusz_ijo_ijo.wav")
+# sound.define_path("noise+łeło_łeło.wav")
 
 # wczytanie sygnału do obiektu
 sound.load_singal()
@@ -72,8 +78,8 @@ sound.save_as_CSV(sound.signal, "time_domain")
 sound.save_as_CSV(raw_fft[:len(raw_fft)//2], "freq_domain")
 
 # filtracja sygnału oryginalnego
-filtered_fft = sound.filter_signal(raw_fft, sound.samplerate, 0, 80)
-filtered_fft = sound.filter_signal(filtered_fft, sound.samplerate, 300, 25000)
+filtered_fft = sound.filter_signal(raw_fft, sound.samplerate, 6000, 25000)
+# filtered_fft = sound.filter_signal(filtered_fft, sound.samplerate, 6000, 25000)
 
 # obliczenie transformatyodwrotnej
 filtered_sound = sound.calculate_invers_fft(filtered_fft)
@@ -149,4 +155,32 @@ print("sound len:", sound.signal_length)
 sound.save_as_CSV(fft_compr, "1.8")
 
 filtered_sound = filtered_sound * sound.max_abs_val
-write("save.wav", sound.samplerate, filtered_sound.astype(np.int16))
+
+fs = sound.samplerate / 2
+lowcut = 20
+highcut = 50
+
+nyq = 0.5 * fs
+low = 2000
+high = 5000
+
+order = 2
+
+b, a = butter(3, 0.05)
+# 0.15 dla magic
+# 0.05 dla ijoijo
+
+y = scipy.signal.filtfilt(b, a, sound.signal)
+y = y * sound.max_abs_val
+write("save.wav", sound.samplerate, y.astype(np.int16))
+
+plt.figure(8)
+plt.plot(sound.signal * sound.max_abs_val)
+plt.plot(y)
+plt.xlim([10000, 15000])
+# plt.ylim([-0.03, 0.03])
+plt.xlabel('Numer próbki')
+plt.ylabel('Amplituda')
+plt.title('Przebiegi czasowe przed i po kompresji')
+plt.legend(["oryginal", "compressed"])
+plt.show()
